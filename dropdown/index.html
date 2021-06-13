@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+
+
+div {
+	 width: 300px;
+	 position: relative;
+}
+ ul {
+	 padding: 0;
+	 margin-top: 3px;
+	 box-shadow: 1px 1px 8px grey;
+	 border-radius: 3px;
+	 position: absolute;
+	 left: 0;
+	 top: 100%;
+	 width: 100%;
+	 display: none;
+}
+ li {
+	 list-style: none;
+	 padding: 8px 15px;
+	 cursor: pointer;
+	 transition: 0.1s;
+}
+ li:hover {
+	 background: gainsboro;
+}
+ button {
+	 width: 100%;
+	 border: none;
+	 border-bottom: 1px solid grey;
+	 padding: 8px 15px;
+	 text-align: left;
+	 background: transparent;
+	 position: relative;
+	 cursor: pointer;
+	 height: 32px;
+}
+ button span:empty::before {
+	 content: 'Select option';
+	 color: grey;
+}
+ button::after {
+	 content: '';
+	 position: absolute;
+	 right: 12px;
+	 top: 10px;
+	 height: 6px;
+	 width: 6px;
+	 border-bottom: 1px solid grey;
+	 border-right: 1px solid grey;
+	 transform: rotate(45deg);
+	 transition: transform 0.2s;
+}
+ button:focus-within ul {
+	 display: block;
+}
+ button:focus::after {
+	 transform: rotate(225deg);
+}
+ 
+  </style>
+</head>
+
+<body>
+  <div class="dropdown">
+    <button class="dropbtn">
+      <span></span>
+			<ul class="dropmenu">
+				<li>Option 1</li>
+				<li>Option 2</li>
+				<li>Option 3</li>
+				<li>Option 4</li>
+			</ul>
+		</button>
+	</div>
+
+  <script>
+    let dropdownOptions = document.querySelectorAll('.dropdown li');
+
+    dropdownOptions.forEach((dropdownOption)=> {
+      dropdownOption.addEventListener('click', function() {
+        let dropdownBtn = dropdownOption.closest('.dropdown').querySelector('.dropbtn');
+				let dropdownBtnText = dropdownBtn.querySelector('span');
+        dropdownBtnText.textContent = dropdownOption.textContent;
+				dropdownBtn.blur();
+      });
+    });
+
+
+  </script>
+</body>
+</html>

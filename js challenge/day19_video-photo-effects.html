@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="assets/reset.css">
+</head>
+
+<style>
+
+  body {
+    text-align: center;
+  }
+
+  video, canvas, li img {
+    transform: scaleX(-1);
+  }
+
+  canvas, .take-snap {
+    vertical-align: bottom;
+  }
+
+  video {
+    position: absolute;
+    right: 5px;
+    top: 0;
+  }
+
+  .take-snap {
+    margin-left: 20px;
+    padding: 10px 15px;
+    background-color: #000;
+    color: #fff;
+    font-size: 16px;
+    font-weight: semi-bold;
+    border-radius: 5px;
+  }
+
+  ul {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  li {
+    margin: 10px;
+  }
+
+  li img {
+    height: 150px;
+    width: 200px;
+    object-fit: cover;
+
+    
+  }
+
+</style>
+<body>
+  <canvas height="400" width="600"></canvas>
+  <video width="200"></video>
+  <button class="take-snap">Take Snap</button>
+  <ul class="strip"></ul>
+
+  <script>
+    const video = document.querySelector('video');
+    const canvas = document.querySelector('canvas');
+    const strip = document.querySelector('.strip');
+    const cxt = canvas.getContext('2d');
+
+    function getVideo() {
+      navigator.mediaDevices.getUserMedia({video: true, audio: false})
+       .then (localMediaStream => {
+         video.srcObject = localMediaStream;
+         video.play();
+      
+      })
+      .catch(e => {
+        console.log(e);
+      })
+
+    }
+
+    function paintToCanvas() {
+      const height = video.videoHeight;
+      const width = video.videoWidth;
+      cxt.height = height;
+      cxt.width = width;
+
+       setInterval(()=> {
+        cxt.drawImage(video, 0, 0, width, height)
+      }, 16);
+      
+    }
+
+    function takeSnap() {
+      shutter = new Audio('assets/audio/camera-shutter-click.mp3')
+      shutter.currentTime = 0;
+      shutter.play();
+
+      const dataUrl = canvas.toDataURL('image/jpeg');
+      strip.innerHTML += 
+      `<li><img src="${dataUrl}" alt="photo"/></li>`;
+  
+    }
+
+    takeSnapBtn = document.querySelector('.take-snap');
+    takeSnapBtn.addEventListener('click', ()=> {
+      takeSnap();
+    })
+
+window.addEventListener('load', ()=> {
+  getVideo();
+    video.addEventListener('canplay', paintToCanvas);
+    
+})
+    
+
+  </script>
+  
+</body>
+</html>
